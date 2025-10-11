@@ -6,6 +6,7 @@ namespace ResturantWebApp
         {
             var builder = WebApplication.CreateBuilder(args);
 
+
             // Add services to the container.
             builder.Services.AddControllersWithViews();
 
@@ -24,6 +25,7 @@ namespace ResturantWebApp
 
             app.UseRouting();
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.MapControllerRoute(
