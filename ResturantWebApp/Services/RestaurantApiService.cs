@@ -98,17 +98,95 @@ namespace RestaurantWebApp.Services
             return response.IsSuccessStatusCode;
         }
 
-        public async Task<bool> TestAuthHandler()
+        public async Task<Menu> GetDishByIdAsync(int id)
         {
-            Console.WriteLine("=== TESTING AUTH HANDLER ===");
+            // Get token from cookie
+            var token = _httpContextAccessor.HttpContext.Request.Cookies["JWToken"];
 
-            // This request should automatically get the auth token
-            var response = await _httpClient.GetAsync($"{_baseUrl}/getalldishes");
+            // Add it to Authorization header
+            if (!string.IsNullOrEmpty(token))
+            {
+                _httpClient.DefaultRequestHeaders.Authorization =
+                    new AuthenticationHeaderValue("Bearer", token);
+            }
 
-            Console.WriteLine($"Test response: {response.StatusCode}");
-            Console.WriteLine("=== END TEST ===");
+            try
+            {
+                var response = await _httpClient.GetAsync($"{_baseUrl}/getdishbyid/{id}");
 
-            return response.IsSuccessStatusCode;
+                if (response.IsSuccessStatusCode)
+                {
+                    var content = await response.Content.ReadAsStringAsync();
+                    return JsonConvert.DeserializeObject<Menu>(content);
+                }
+                else
+                {
+                    Console.WriteLine($"Failed to get dish {id}. Status: {response.StatusCode}");
+                    return null;
+                }
+            }
+            catch (HttpRequestException httpEx)
+            {
+                Console.WriteLine($"HTTP error getting dish {id}: {httpEx.Message}");
+                return null;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error getting dish {id}: {ex.Message}");
+                return null;
+            }
+
         }
+
+        public async Task<bool> UpdateDishAsync(int id, Menu dish)
+        {
+            try
+            {
+                // Get token from cookie
+                var token = _httpContextAccessor.HttpContext.Request.Cookies["JWToken"];
+
+                // Add it to Authorization header
+                if (!string.IsNullOrEmpty(token))
+                {
+                    _httpClient.DefaultRequestHeaders.Authorization =
+                        new AuthenticationHeaderValue("Bearer", token);
+                }
+
+                // Serialize the updated dish to JSON
+                var json = JsonConvert.SerializeObject(dish);
+                var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+                // Send PUT request to update the dish
+                var response = await _httpClient.PutAsync($"{_baseUrl}/updatemenu/{id}", content);
+
+                Console.WriteLine($"UpdateDishAsync: Response status = {response.StatusCode}");
+
+                return response.IsSuccessStatusCode;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error in UpdateDishAsync: {ex.Message}");
+                return false;
+            }
+
+
+        }
+
+
+
+        //public async Task<bool> TestAuthHandler()
+        //{
+        //    Console.WriteLine("=== TESTING AUTH HANDLER ===");
+
+        //    // This request should automatically get the auth token
+        //    var response = await _httpClient.GetAsync($"{_baseUrl}/getalldishes");
+
+        //    Console.WriteLine($"Test response: {response.StatusCode}");
+        //    Console.WriteLine("=== END TEST ===");
+
+        //    return response.IsSuccessStatusCode;
+        //}
+
+
     }
 }

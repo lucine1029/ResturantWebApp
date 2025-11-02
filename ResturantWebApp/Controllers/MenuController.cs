@@ -60,18 +60,33 @@ namespace RestaurantWebApp.Controllers
             }
         }
 
-        //[HttpGet]
-        //public IActionResult EditDish(int id)  // Display the form to edit an existing dish
-        //{
-        //    if(id == null || id == 0)
-        //    {
-        //        return NotFound();
-        //    }
-        //    var dish = _restaurantApiService.GetDishByIdAsync(id).Result;
-        //    if (dish == null)
-        //        return NotFound();
-        //    return View(dish);
-        //}
+        [HttpGet]
+        public IActionResult EditDish(int id)  // Display the form to edit an existing dish
+        {
+            if (id == null || id == 0)
+            {
+                return NotFound();
+            }
+            var dish = _restaurantApiService.GetDishByIdAsync(id).Result;
+            if (dish == null)
+                return NotFound();
+            return View(dish);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> EditDish(int id, Menu dish)  // Handle form submission to update an existing dish
+        {
+            if (!ModelState.IsValid)
+                return View(dish);
+            var success = await _restaurantApiService.UpdateDishAsync(id, dish);
+            if (success)
+                return RedirectToAction("AdminMenu");
+            else
+            {
+                ModelState.AddModelError("", "Failed to update dish. Please try again.");
+                return View(dish);
+            }
+        }
 
 
     }
