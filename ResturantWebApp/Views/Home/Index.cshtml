@@ -1,8 +1,139 @@
 ﻿@{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "Home - RestaurantSU";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+<section class="welcome-section bg-light-green py-5">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-10">
+                <div class="intro-card p-5 rounded shadow">
+                    <!-- Header Section -->
+                    <div class="text-center mb-5">
+                        <h1 class="display-4 mb-3">
+                            <strong class="text-success">Welcome to RestaurantSU</strong>
+                        </h1>
+                        <p class="lead text-muted">Where culinary heritage meets seasonal freshness</p>
+                    </div>
+
+                    <!-- Main Content -->
+                    <div class="text-start">
+                        <p class="fs-5 mb-4">
+                            At RestaurantSU, our name comes from the Chinese character <strong>素 (sù)</strong>—meaning vegetarian
+                            and representing a path to inner peace. We explore cultural roots through cuisine, creating dishes
+                            that tell stories of heritage and harmony.
+                        </p>
+
+                        <!-- Chef Profiles -->
+                        <div class="row mb-4">
+                            <div class="col-lg-6 mb-3">
+                                <div class="d-flex align-items-start">
+                                    <div class="flex-shrink-0">
+                                        <span class="fs-2">🇨🇳</span>
+                                    </div>
+                                    <div class="flex-grow-1 ms-3">
+                                        <h5 class="text-success">Chef J.'s Chinese Heritage</h5>
+                                        <p class="mb-0">Shares flavors from her Chinese homeland—celebrating rice, tea, ginger，oranges, and coastal inspirations.</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-6 mb-3">
+                                <div class="d-flex align-items-start">
+                                    <div class="flex-shrink-0">
+                                        <span class="fs-2">🇸🇪</span>
+                                    </div>
+                                    <div class="flex-grow-1 ms-3">
+                                        <h5 class="text-success">Chef C.'s Swedish Roots</h5>
+                                        <p class="mb-0">Brings the essence of Swedish forests with wild mushrooms and root vegetables.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Closing -->
+                        <div class="text-center mt-4">
+                            <p class="fs-5 fst-italic text-muted">
+                                We craft our menu around seasonal ingredients, transforming these culinary memories
+                                into dishes we're proud to share. Welcome to our table—we hope you enjoy the journey!
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Buttons -->
+                    <div class="text-center mt-4">
+                        <a asp-controller="Menu" asp-action="Index" class="btn btn-success btn-lg me-3">View Menu</a>
+                        <a asp-controller="Book" asp-action="Index" class="btn btn-outline-success btn-lg">Book a Table</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+
+<!-- Seasonal Favorites Section -->
+<section class="seasonal-dishes py-5 bg-light">
+    <div class="container">
+        <h2 class="text-center mb-5 display-5">Our Seasonal Favorites</h2>
+        <p class="text-center lead mb-5">Experience the changing seasons through our rotating menu of chef's specialties</p>
+
+        <div class="row g-4">
+            <!-- Spring -->
+            <div class="col-md-6 col-lg-3">
+                <div class="dish-card card h-100 border-0 shadow-sm">
+                    <div class="season-badge bg-success text-white text-center py-1">
+                        <i class="fas fa-seedling me-2"></i>Spring
+                    </div>
+                    <img src="~/images/spring-rolls.png" class="card-img-top" alt="Nordic Spring Rolls">
+                    <div class="card-body text-center">
+                        <h6 class="card-title">Nordic Spring Rolls</h6>
+                        <p class="card-text small">Classic fried spring rolls with swedish-kale, chinese-Tofu, spring onion and bean sprouts and homemade dipping sauce</p>
+                    </div>
+                </div>
+            </div>
+            <!-- Summer -->
+            <div class="col-md-6 col-lg-3">
+                <div class="dish-card card h-100 border-0 shadow-sm">
+                    <div class="season-badge bg-warning text-dark text-center py-1">
+                        <i class="fas fa-sun me-2"></i>Summer
+                    </div>
+                    <img src="~/images/cold-noodles.png" class="card-img-top" alt="Seasonal Cold Noodles">
+                    <div class="card-body text-center">
+                        <h6 class="card-title">Seasonal Cold Noodles</h6>
+                        <p class="card-text small">Chilled buckwheat noodles with sesame dressing and fresh summer vegetables</p>
+                    </div>
+                </div>
+            </div>
+            <!-- Autumn -->
+            <div class="col-md-6 col-lg-3">
+                <div class="dish-card card h-100 border-0 shadow-sm">
+                    <div class="season-badge bg-danger text-white text-center py-1">
+                        <i class="fas fa-leaf me-2"></i>Autumn
+                    </div>
+                    <img src="~/images/kantarell-soup.jpg" class="card-img-top" alt="kantarell Soup">
+                    <div class="card-body text-center">
+                        <h6 class="card-title">Kantarell Soup</h6>
+                        <p class="card-text small">Hearty root vegetables with creamy spiced forest mushrooms</p>
+                    </div>
+                </div>
+            </div>
+            <!-- Winter -->
+            <div class="col-md-6 col-lg-3">
+                <div class="dish-card card h-100 border-0 shadow-sm">
+                    <div class="season-badge bg-info text-white text-center py-1">
+                        <i class="fas fa-snowflake me-2"></i>Winter
+                    </div>
+                    <img src="~/images/ginger-noodle-soup.png" class="card-img-top" alt="Ginger Vegan Noodle Soup">
+                    <div class="card-body text-center">
+                        <h6 class="card-title">Ginger Vegan Noodle Soup</h6>
+                        <p class="card-text small">Chef J.hometown dish with warming ginger-infused broth with special rice noodles, tofu, Shiitake mushrooms and green vegatables </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="text-center mt-4">
+            <p class="text-muted"><small>Menu changes seasonally based on fresh local availability</small></p>
+        </div>
+    </div>
+</section>

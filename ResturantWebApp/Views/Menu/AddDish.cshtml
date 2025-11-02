@@ -1,0 +1,162 @@
+﻿@using RestaurantWebApp.Models
+@model DishViewModel
+
+@{
+    ViewData["Title"] = "Create New Dish";
+}
+
+<div class="container mt-5">
+    <div class="card shadow-lg p-4">
+        <h3 class="text-center mb-4 text-success fw-bold">
+            <i class="fas fa-plus-circle me-2"></i> Create New Dish
+        </h3>
+
+        <form asp-action="AddDish" method="post" novalidate>
+            <div class="mb-3">
+                <label asp-for="DishName" class="form-label"></label>
+                <input asp-for="DishName" class="form-control" placeholder="Enter dish name" />
+                <span asp-validation-for="DishName" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="Description" class="form-label"></label>
+                <textarea asp-for="Description" class="form-control" rows="3" placeholder="Enter dish description"></textarea>
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="Price" class="form-label"></label>
+                <input asp-for="Price" class="form-control" type="number" placeholder="Enter price (kr)" />
+                <span asp-validation-for="Price" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="ImageUrl" class="form-label"></label>
+                <input asp-for="ImageUrl" class="form-control" placeholder="Enter image URL (optional)" />
+            </div>
+
+            <hr />
+
+            <!-- Boolean fields with toggle icons -->
+            <div class="row">
+                @foreach (var boolField in new[]
+                                {
+                                new { Label = "Available", Field = nameof(Model.IsAvailable) },
+                                new { Label = "Vegan", Field = nameof(Model.IsVegan) },
+                                new { Label = "Has Nuts", Field = nameof(Model.HasNuts) },
+                                new { Label = "Has Egg", Field = nameof(Model.HasEgg) },
+                                new { Label = "Has Dairy", Field = nameof(Model.HasDairy) },
+                                new { Label = "Spicy", Field = nameof(Model.IsSpicy) },
+                                new { Label = "Gluten Free", Field = nameof(Model.IsGlutenFree) },
+                                })
+                {
+                    <div class="col-md-4 mb-3 text-center">
+                        <label class="form-label d-block fw-bold">@boolField.Label</label>
+                        <input type="hidden" name="@boolField.Field" value="false" />
+                        <button type="button" class="btn btn-outline-secondary toggle-btn" data-field="@boolField.Field">
+                            <i class="fas fa-times text-danger"></i>
+                        </button>
+                    </div>
+                }
+            </div>
+
+            <div class="text-center mt-4">
+
+                <button type="submit" class="btn btn-success w-50">
+                    
+                    <i class="fas fa-save me-2"></i> Save Dish
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+
+    <script>
+        document.querySelectorAll(".toggle-btn").forEach(btn => {
+            btn.addEventListener("click", function () {
+                const icon = this.querySelector("i");
+                const fieldName = this.getAttribute("data-field");
+
+                // Toggle true/false visually
+                const isActive = icon.classList.contains("fa-check");
+                if (isActive) {
+                    icon.classList.remove("fa-check", "text-success");
+                    icon.classList.add("fa-times", "text-danger");
+                    this.closest("div").querySelector(`input[name="${fieldName}"]`).value = "false";
+                } else {
+                    icon.classList.remove("fa-times", "text-danger");
+                    icon.classList.add("fa-check", "text-success");
+                    this.closest("div").querySelector(`input[name="${fieldName}"]`).value = "true";
+                }
+            });
+        });
+    </script>
+}
+
+
+
+
+
+
+
+@* <!-- Add Dish Modal -->
+<div class="modal fade" id="addDishModal" tabindex="-1" aria-labelledby="addDishModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header bg-success text-white">
+                <h5 class="modal-title" id="addDishModalLabel">
+                    <i class="fas fa-plus-circle me-2"></i>Add New Dish
+                </h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="addDishForm">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="dishName" class="form-label">Dish Name</label>
+                                <input type="text" class="form-control" id="dishName" required>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="dishPrice" class="form-label">Price</label>
+                                <input type="number" class="form-control" id="dishPrice" step="0.01" required>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="dishCategory" class="form-label">Category</label>
+                                <select class="form-select" id="dishCategory" required>
+                                    <option value="">Select Category</option>
+                                    <option value="Appetizer">Appetizer</option>
+                                    <option value="Main Course">Main Course</option>
+                                    <option value="Dessert">Dessert</option>
+                                    <option value="Beverage">Beverage</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="dishImage" class="form-label">Dish Image</label>
+                                <input type="file" class="form-control" id="dishImage" accept="image/*">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="dishDescription" class="form-label">Description</label>
+                        <textarea class="form-control" id="dishDescription" rows="3" required></textarea>
+                    </div>
+                    <div class="form-check mb-3">
+                        <input class="form-check-input" type="checkbox" id="isAvailable" checked>
+                        <label class="form-check-label" for="isAvailable">
+                            Available for ordering
+                        </label>
+                    </div>
+                </form>
+            </div> *@

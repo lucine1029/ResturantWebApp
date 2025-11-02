@@ -1,3 +1,8 @@
+
+//using RestaurantWebApp.Handlers;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using RestaurantWebApp.Services;
+
 namespace ResturantWebApp
 {
     public class Program
@@ -9,6 +14,32 @@ namespace ResturantWebApp
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();
+            builder.Services.AddHttpContextAccessor();
+            //builder.Services.AddTransient<AuthHeaderHandler>();
+
+            builder.Services.AddHttpClient<IRestaurantApiService, RestaurantApiService>();
+
+            //builder.Services.AddHttpClient<IRestaurantApiService, RestaurantApiService>()
+            //    .AddHttpMessageHandler<AuthHeaderHandler>();
+
+            // Add cookie authentication
+            builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+                .AddCookie(options =>
+                {
+                    //options.Cookie.Name = "auth_token";
+                    //options.Cookie.HttpOnly = true;
+                    //options.Cookie.SecurePolicy = CookieSecurePolicy.None; // For localhost
+                    //options.Cookie.SameSite = SameSiteMode.Lax;
+                    options.LoginPath = "/Admin/Login"; // redirect here if not logged in
+                    options.LogoutPath = "/Admin/Logout";
+                    //options.ExpireTimeSpan = TimeSpan.FromMinutes(60);
+                    //options.SlidingExpiration = true;
+                });
+
+
+
+            // Add your custom API service
+            builder.Services.AddScoped<RestaurantApiService>();
 
             var app = builder.Build();
 
