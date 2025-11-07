@@ -10,6 +10,7 @@ namespace RestaurantWebApp.Services
         Task<bool> LogoutAsync(string token);
         Task<bool> AddDishAsync(DishViewModel newDish);
         Task<bool> UpdateDishAsync(int id, Menu dish);
+        Task<bool> DeleteDishAsync(int id);
 
     }
 }

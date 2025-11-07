@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using Microsoft.AspNetCore.Http.HttpResults;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using RestaurantWebApp.Models;
 using System.Net.Http.Headers;
@@ -142,6 +143,12 @@ namespace RestaurantWebApp.Services
         {
             try
             {
+                // Validate that the IDs match
+                if (id != dish.Id)
+                {
+                    Console.WriteLine($"ID mismatch: URL id={id}, Dish id={dish.Id}");
+                    return false;
+                }
                 // Get token from cookie
                 var token = _httpContextAccessor.HttpContext.Request.Cookies["JWToken"];
 
@@ -152,23 +159,94 @@ namespace RestaurantWebApp.Services
                         new AuthenticationHeaderValue("Bearer", token);
                 }
 
+                // Create a clean object to avoid any serialization issues
+                var updateData = new
+                {
+                    Id = dish.Id,
+                    DishName = dish.DishName ?? string.Empty, // Ensure not null to match API expectations
+                    Description = dish.Description ?? string.Empty,// Ensure not null to match API expectations
+                    ImageUrl = dish.ImageUrl ?? string.Empty,// Ensure not null to match API expectations
+                    Price = dish.Price,
+                    IsAvailable = dish.IsAvailable,
+                    IsVegan = dish.IsVegan,
+                    HasNuts = dish.HasNuts,
+                    HasEgg = dish.HasEgg,
+                    HasDairy = dish.HasDairy,
+                    IsSpicy = dish.IsSpicy,
+                    IsGlutenFree = dish.IsGlutenFree
+                };
+
                 // Serialize the updated dish to JSON
-                var json = JsonConvert.SerializeObject(dish);
-                var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+                var json = JsonConvert.SerializeObject(dish, Formatting.Indented);
+                //Console.WriteLine("=== ACTUAL JSON BEING SENT ===");
+                //Console.WriteLine(json);
+                //Console.WriteLine("===============================");
 
                 // Send PUT request to update the dish
-                var response = await _httpClient.PutAsync($"{_baseUrl}/updatemenu/{id}", content);
+                var response = await _httpClient.PutAsJsonAsync($"{_baseUrl}/updatemenu/{id}", updateData);
 
                 Console.WriteLine($"UpdateDishAsync: Response status = {response.StatusCode}");
 
-                return response.IsSuccessStatusCode;
+                // Read response content for debugging
+                if (!response.IsSuccessStatusCode)
+                {
+                    //var errorContent = await response.Content.ReadAsStringAsync();
+                    //Console.WriteLine($"=== ERROR RESPONSE ===");
+                    //Console.WriteLine($"Status: {response.StatusCode}");
+                    //Console.WriteLine($"Error: {errorContent}");
+                    //Console.WriteLine($"======================");
+                    return false;
+                }
+
+                return true;
             }
             catch (Exception ex)
             {
                 Console.WriteLine($"Error in UpdateDishAsync: {ex.Message}");
                 return false;
             }
+        }
 
+        public async Task<bool> DeleteDishAsync(int id)
+        {
+            // Get token from cookie
+            var token = _httpContextAccessor.HttpContext.Request.Cookies["JWToken"];
+
+            // Clear existing headers to avoid duplicates
+            _httpClient.DefaultRequestHeaders.Remove("Authorization");
+
+            // Add it to Authorization header
+            if (!string.IsNullOrEmpty(token))
+            {
+                _httpClient.DefaultRequestHeaders.Authorization =
+                    new AuthenticationHeaderValue("Bearer", token);
+            }
+
+            try
+            {
+                var response = await _httpClient.DeleteAsync($"{_baseUrl}/deletemenu/{id}");
+
+                if (response.IsSuccessStatusCode)
+                {
+                    return true;
+                }
+                else
+                {
+                    Console.WriteLine($"Failed to delete dish {id}. Status: {response.StatusCode}");
+                    return false;
+                }
+            }
+            catch (HttpRequestException httpEx)
+            {
+                Console.WriteLine($"HTTP error deleting dish {id}: {httpEx.Message}");
+                return false;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error deleting dish {id}: {ex.Message}");
+                return false;
+            }
 
         }
 

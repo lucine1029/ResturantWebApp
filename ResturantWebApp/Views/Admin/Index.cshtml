@@ -1,19 +1,18 @@
 ﻿
 @{
-    ViewData["Title"] = "Admin Menu";
+    ViewData["Title"] = "Admin Dashboard";
 }
-
 
 <div class="container-fluid py-5">
     <div class="row justify-content-center">
         <div class="col-lg-8 col-md-10">
             <!-- Header Section -->
             <div class="text-center mb-5">
-                <div class="admin-welcome-card bg-light text-dark p-4 rounded-3 shadow">
-                    <h1 class="display-6 fw-bold mb-3">
+                <div class="bg-light p-4 rounded-3 border border-success">
+                    <h1 class="display-6 fw-bold mb-3 text-success">
                         <i class="fas fa-user-shield me-3"></i>Admin Dashboard
                     </h1>
-                    <p class="lead mb-0">Welcome back, Administrator! Manage your restaurant efficiently.</p>
+                    <p class="lead mb-0 text-muted">Welcome back, Administrator! Manage your restaurant efficiently.</p>
                 </div>
             </div>
 
@@ -22,7 +21,7 @@
                 <!-- Menu Management -->
                 <div class="col-md-6 col-lg-4">
                     <div class="d-grid">
-                        <a asp-controller="Menu" asp-action="AdminMenu" class="btn btn-success btn-lg py-3 admin-menu-btn">
+                        <a asp-controller="Menu" asp-action="AdminMenu" class="btn btn-success btn-lg py-3">
                             <i class="fas fa-utensils me-2"></i>Menu Management
                         </a>
                     </div>
@@ -31,7 +30,7 @@
                 <!-- Booking Management -->
                 <div class="col-md-6 col-lg-4">
                     <div class="d-grid">
-                        <a asp-controller="Booking" asp-action="Index" class="btn btn-success btn-lg py-3 admin-menu-btn">
+                        <a asp-controller="Booking" asp-action="Index" class="btn btn-success btn-lg py-3">
                             <i class="fas fa-calendar-alt me-2"></i>Booking Management
                         </a>
                     </div>
@@ -40,7 +39,7 @@
                 <!-- Table Management -->
                 <div class="col-md-6 col-lg-4">
                     <div class="d-grid">
-                        <a asp-controller="Table" asp-action="Index" class="btn btn-success btn-lg py-3 admin-menu-btn">
+                        <a asp-controller="Table" asp-action="Index" class="btn btn-success btn-lg py-3">
                             <i class="fas fa-chair me-2"></i>Table Management
                         </a>
                     </div>
@@ -49,7 +48,7 @@
                 <!-- Customer Management -->
                 <div class="col-md-6 col-lg-4">
                     <div class="d-grid">
-                        <a asp-controller="Customer" asp-action="Index" class="btn btn-success btn-lg py-3 admin-menu-btn">
+                        <a asp-controller="Customer" asp-action="Index" class="btn btn-success btn-lg py-3">
                             <i class="fas fa-users me-2"></i>Customer Management
                         </a>
                     </div>
@@ -61,7 +60,7 @@
                 <div class="col-md-6 col-lg-4">
                     <div class="d-grid">
                         <form asp-controller="Admin" asp-action="Logout" method="post" class="d-inline">
-                            <button type="submit" class="btn btn-outline-danger btn-lg py-3 w-100 logout-btn">
+                            <button type="submit" class="btn btn-outline-danger btn-lg py-3 w-100">
                                 <i class="fas fa-sign-out-alt me-2"></i>Logout
                             </button>
                         </form>
@@ -79,46 +78,3 @@
         </div>
     </div>
 </div>
-
-<style>
-    .admin-welcome-card {
-        background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%);
-        border: 1px solid #c3e6cb;
-    }
-
-    .admin-menu-btn {
-        background: linear-gradient(135deg, #198754 0%, #146c43 100%);
-        border: none;
-        font-weight: 600;
-        transition: all 0.3s ease;
-        border-radius: 10px;
-    }
-
-        .admin-menu-btn:hover {
-            background: linear-gradient(135deg, #146c43 0%, #0f5132 100%);
-            transform: translateY(-3px);
-            box-shadow: 0 6px 20px rgba(25, 135, 84, 0.4);
-        }
-
-    .logout-btn {
-        font-weight: 600;
-        border-width: 2px;
-        border-radius: 10px;
-        transition: all 0.3s ease;
-    }
-
-        .logout-btn:hover {
-            background-color: #dc3545;
-            color: white;
-            transform: translateY(-3px);
-            box-shadow: 0 6px 20px rgba(220, 53, 69, 0.4);
-        }
-
-    body {
-        background-color: #f8f9fa;
-    }
-
-    .d-grid {
-        gap: 15px;
-    }
-</style>

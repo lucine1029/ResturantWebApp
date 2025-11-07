@@ -2,6 +2,7 @@
 using Newtonsoft.Json;
 using RestaurantWebApp.Models;
 using RestaurantWebApp.Services;
+using System.Reflection;
 
 namespace RestaurantWebApp.Controllers
 {
@@ -78,6 +79,20 @@ namespace RestaurantWebApp.Controllers
         {
             if (!ModelState.IsValid)
                 return View(dish);
+            //// Add debug logging
+            //Console.WriteLine($"=== EDIT DISH SUBMISSION ===");
+            //Console.WriteLine($"ID: {dish.Id}");
+            //Console.WriteLine($"Name: {dish.DishName}");
+            //Console.WriteLine($"IsSpicy: {dish.IsSpicy}");
+            //Console.WriteLine($"IsVegan: {dish.IsVegan}");
+            //Console.WriteLine($"HasNuts: {dish.HasNuts}");
+            //Console.WriteLine($"HasEgg: {dish.HasEgg}");
+            //Console.WriteLine($"HasDairy: {dish.HasDairy}");
+            //Console.WriteLine($"IsGlutenFree: {dish.IsGlutenFree}");
+            //Console.WriteLine($"IsAvailable: {dish.IsAvailable}");
+            //Console.WriteLine($"Price: {dish.Price}");
+            //Console.WriteLine($"=============================");
+
             var success = await _restaurantApiService.UpdateDishAsync(id, dish);
             if (success)
                 return RedirectToAction("AdminMenu");
@@ -88,6 +103,43 @@ namespace RestaurantWebApp.Controllers
             }
         }
 
+        public IActionResult DeleteDish(int id)  // For comfirmation before deletion
+        {
+            if (id == null || id == 0)
+            {
+                return NotFound();
+            }
+            var dish = _restaurantApiService.GetDishByIdAsync(id).Result;
+            if (dish == null)
+                return NotFound();
+            return View(dish);
+        }
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteDishConfirmation(int id)  // Handle deletion of a dish
+        {
+            try
+            {
+                var result = await _restaurantApiService.DeleteDishAsync(id);
+                if (result)
+                {
+                    TempData["SuccessMessage"] = "Dish deleted successfully!";
+                    Console.WriteLine("Successfully deleted.");//for debugging
+
+                }
+                else
+                {
+                    TempData["ErrorMessage"] = "Failed to delte dish.";
+                    Console.WriteLine("Failed to delte dish.");//for debugging
+                }
+                return RedirectToAction("AdminMenu");
+            }
+            catch (Exception ex)
+            {
+                TempData["ErrorMessage"] = $"Error deleting dish: {ex.Message}";
+                return RedirectToAction("Index");
+            }
+        }
     }
 }

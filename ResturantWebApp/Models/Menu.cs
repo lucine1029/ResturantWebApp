@@ -13,7 +13,6 @@ namespace RestaurantWebApp.Models
         [Required]
         public int Price { get; set; }
         public string? ImageUrl { get; set; }
-        [Required]
         public bool IsAvailable { get; set; }
         public bool IsVegan { get; set; }
         public bool HasNuts { get; set; }
