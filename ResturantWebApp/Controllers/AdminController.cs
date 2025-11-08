@@ -141,7 +141,9 @@ namespace RestaurantWebApp.Controllers
         [HttpPost]
         public async Task<IActionResult> Logout()
         {
-            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+            //await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+            //return RedirectToAction("Login");
+            HttpContext.Response.Cookies.Delete("JWToken");
             return RedirectToAction("Login");
         }
     }

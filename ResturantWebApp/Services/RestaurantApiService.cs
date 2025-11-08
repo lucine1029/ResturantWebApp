@@ -55,7 +55,7 @@ namespace RestaurantWebApp.Services
             var json = JsonConvert.SerializeObject(loginViewModel);
             var content = new StringContent(json, Encoding.UTF8, "application/json");
 
-            var response = await _httpClient.PostAsync($"{_baseUrl}/login", content);       
+            var response = await _httpClient.PostAsync($"{_baseUrl}/login", content);
 
             if (!response.IsSuccessStatusCode)
                 return null;
@@ -67,6 +67,7 @@ namespace RestaurantWebApp.Services
 
             string token = data?.token;
             return token;
+
         }
 
         public async Task<bool> LogoutAsync(string token)
@@ -75,6 +76,7 @@ namespace RestaurantWebApp.Services
 
             var response = await _httpClient.PostAsync($"{_baseUrl}/logout", null);
             return response.IsSuccessStatusCode;
+
         }
 
         public async Task<bool> AddDishAsync(DishViewModel newDish)
